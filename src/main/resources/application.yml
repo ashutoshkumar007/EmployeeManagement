@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: EmployeeManagementService
+
+payroll:
+  service:
+    base:
+      url: http://dummy.restapiexample.com
+    endpoint:
+      create: /api/v1/create
+      getAll: /api/v1/employees
+
+employee:
+  age:
+    min: 18
+    max: 65
