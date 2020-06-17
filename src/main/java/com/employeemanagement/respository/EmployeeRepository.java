@@ -2,7 +2,6 @@ package com.employeemanagement.respository;
 
 import com.employeemanagement.modal.request.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,12 +10,10 @@ import java.util.List;
 public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 
     List<Employee> findAllByNameContains(String name);
-    List<Employee>  findAllByAge(Integer age);
-    List<Employee>  findByNameMatchesRegex(String name);
-//
-    @Query(value = "SELECT name FROM employee WHERE  ", nativeQuery = true)
+    List<Employee> findAllByAge(Integer age);
+    List<Employee> findAllByNameStartsWith(String name);
 
-    List<Employee> findAllByNameRegex(String regex);
+
 
 
 }

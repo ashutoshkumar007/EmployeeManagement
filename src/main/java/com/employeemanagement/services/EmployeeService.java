@@ -1,5 +1,6 @@
 package com.employeemanagement.services;
 
+import com.employeemanagement.annotation.MethodLog;
 import com.employeemanagement.dto.response.PayrollEmployee;
 import com.employeemanagement.dto.response.PayrollEmployeeDetails;
 import com.employeemanagement.exception.EmployeeNotFoundException;
@@ -15,12 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.employeemanagement.constant.StringConstant.NAME_REGEX;
-
 @Service
 public class EmployeeService {
-
-    private final EmployeeRepository employeeRepository;
 
     @Autowired
     PayrollService payrollService;
@@ -28,10 +25,7 @@ public class EmployeeService {
     @Autowired
     EmployeeRepoService employeeRepoService;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
-
+    @MethodLog
     public Employee createEmployee(EmployeeRequest employeeRequest) {
         String newName = getNewName(employeeRequest.getName());
         employeeRequest.setName(newName);
@@ -39,17 +33,24 @@ public class EmployeeService {
         return employeeRepoService.saveEmployee(payrollEmployee);
     }
 
+    @MethodLog
     public List<Employee> getEmployeesByName(String name) {
-        List<Employee> employeeList = employeeRepoService.fetchAllEmployeesByName(name);
-        if (employeeList.size() > 0) {
-            List<PayrollEmployeeDetails> payrollEmployeeDetailsList = payrollService.getAllEmployees();
+        List<Integer> payrollEmpIds = Optional.ofNullable(payrollService.getAllEmployees())
+                .filter(CollectionUtils::isNotEmpty)
+                .map(payrollIds -> payrollIds.stream()
+                        .map(PayrollEmployeeDetails::getId).collect(Collectors.toList()))
+                .orElseThrow(EmployeeNotFoundException::new);
 
-            return employeeList;
-        } else
-            return null;
+        return Optional.ofNullable(employeeRepoService.fetchAllEmployeesByName(name))
+                .filter(CollectionUtils::isNotEmpty)
+                .map(employees -> employees.stream()
+                        .filter(employee -> payrollEmpIds.contains(employee.getPayrollId())).collect(Collectors.toList()))
+                .filter(CollectionUtils::isNotEmpty)
+                .orElseThrow(EmployeeNotFoundException::new);
 
     }
 
+    @MethodLog
     public List<Employee> getEmployeesByAge(Integer age) {
         List<Integer> payrollEmpIds = Optional.ofNullable(payrollService.getAllEmployees())
                 .filter(CollectionUtils::isNotEmpty)
@@ -57,27 +58,25 @@ public class EmployeeService {
                         .map(PayrollEmployeeDetails::getId).collect(Collectors.toList()))
                 .orElseThrow(EmployeeNotFoundException::new);
 
-
         return Optional.ofNullable(employeeRepoService.fetchEmployeesByAge(age))
                 .filter(CollectionUtils::isNotEmpty)
                 .map(employees -> employees.stream()
                         .filter(employee -> payrollEmpIds.contains(employee.getPayrollId())).collect(Collectors.toList()))
                 .filter(CollectionUtils::isNotEmpty)
                 .orElseThrow(EmployeeNotFoundException::new);
+
     }
 
     private String getNewName(String name) {
-        String nameRegex = name+NAME_REGEX;
-        List<Employee> employeeRequestList = employeeRepoService.fetchAllEmployeesByNameRegex(nameRegex);
-        if(employeeRequestList.size() >0)
-         return name+employeeRequestList.size();
+        int length = name.length();
+       List<Employee> employeeList =  Optional.ofNullable(employeeRepoService.fetchAllEmployeesByName(name))
+               .map(employees -> employees.stream()
+               .filter(employee -> employee.getName().length() >= length)
+                       .collect(Collectors.toList())).get();
+
+       if(employeeList.size()>0)
+           return name+employeeList.size();
         return name;
-    }
-
-
-    // temp util
-    public List<Employee> getAll() {
-        return employeeRepository.findAll();
     }
 
     public PayrollEmployeeDetails getEmployeesById(int id){

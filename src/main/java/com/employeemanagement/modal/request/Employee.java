@@ -1,5 +1,6 @@
 package com.employeemanagement.modal.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.employeemanagement.constant.StringConstant.NAME_REGEX;
+import static com.employeemanagement.constant.StringConstant.SEARCH_NAME_REGEX;
+
 @Service
 public class EmployeeRepoService {
 
@@ -36,8 +39,9 @@ public class EmployeeRepoService {
         return employeeRepository.findAllByAge(age);
     }
 
-    public List<Employee> fetchAllEmployeesByNameRegex(String regex) {
-        return employeeRepository.findAllByNameRegex(regex);
+    public List<Employee> fetchAllEmployeesByNameRegex(String name) {
+        List<Employee> employeeList = employeeRepository.findAllByNameStartsWith(name);
+        return employeeList;
     }
 
 }

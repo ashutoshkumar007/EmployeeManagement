@@ -1,3 +1,7 @@
+server:
+  port: 8035
+
+
 spring:
   profiles:
     active: dev
@@ -12,7 +16,12 @@ payroll:
       create: /api/v1/create
       getAll: /api/v1/employees
 
-employee:
-  age:
-    min: 18
-    max: 65
+management:
+  server:
+    port: 8036
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
