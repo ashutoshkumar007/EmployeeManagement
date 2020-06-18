@@ -7,6 +7,9 @@ spring:
     active: dev
   application:
     name: EmployeeManagementService
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 payroll:
   service:
