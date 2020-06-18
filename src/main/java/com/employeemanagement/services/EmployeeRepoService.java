@@ -1,5 +1,8 @@
 package com.employeemanagement.services;
 
+import com.employeemanagement.adapter.PayrollEmployeeAdapter;
+import com.employeemanagement.adapter.RequestEmployeeAdapter;
+import com.employeemanagement.dto.request.EmployeeRequest;
 import com.employeemanagement.dto.response.PayrollEmployee;
 import com.employeemanagement.modal.request.Employee;
 import com.employeemanagement.respository.EmployeeRepository;
@@ -8,30 +11,35 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.employeemanagement.constant.StringConstant.NAME_REGEX;
-import static com.employeemanagement.constant.StringConstant.SEARCH_NAME_REGEX;
-
 @Service
 public class EmployeeRepoService {
 
     @Autowired
     EmployeeRepository employeeRepository;
 
+    @Autowired
+    EmployeeService employeeService;
+
+    public EmployeeRequest saveAndGetEmployee(EmployeeRequest employeeRequest){
+        String newName = employeeService.getNewName(employeeRequest.getName());
+        employeeRequest.setName(newName);
+        try{
+            employeeRepository.save(RequestEmployeeAdapter.adaptEmployeeRequest(employeeRequest));
+        }catch (Exception e){
+            return  saveAndGetEmployee(employeeRequest);
+        }
+        return employeeRequest;
+    }
+
     public Employee saveEmployee(PayrollEmployee payrollEmployee) {
         try {
-            Employee employee = new Employee()
-                    .setPayrollId(payrollEmployee.getId())
-                    .setAge(payrollEmployee.getAge())
-                    .setName(payrollEmployee.getName());
-            employeeRepository.save(employee);
-            return employee;
+           return  employeeRepository.save(PayrollEmployeeAdapter.adaptPayrollEmployee(payrollEmployee));
         } catch (Exception e) {
             throw e;
         }
-
     }
 
-    public List<Employee> fetchAllEmployeesByName(String name) {
+    public List<Employee> fetchEmployeesByName(String name) {
         return employeeRepository.findAllByNameContains(name);
     }
 
@@ -39,9 +47,5 @@ public class EmployeeRepoService {
         return employeeRepository.findAllByAge(age);
     }
 
-    public List<Employee> fetchAllEmployeesByNameRegex(String name) {
-        List<Employee> employeeList = employeeRepository.findAllByNameStartsWith(name);
-        return employeeList;
-    }
 
 }

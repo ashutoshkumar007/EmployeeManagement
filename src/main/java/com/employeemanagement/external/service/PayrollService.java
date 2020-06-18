@@ -1,7 +1,7 @@
 package com.employeemanagement.external.service;
 import com.employeemanagement.dto.response.*;
 import com.employeemanagement.dto.request.EmployeeRequest;
-import com.employeemanagement.external.ApiManager;
+import com.employeemanagement.external.RestApiManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,21 +22,21 @@ public class PayrollService {
     private String payrollGetAllEndpoint;
 
     @Autowired
-    ApiManager apiManager;
+    RestApiManager restApiManager;
 
 
     public List<PayrollEmployeeDetails> getAllEmployees(){
-        return apiManager.get(payrollBaseUrl,payrollGetAllEndpoint,null
+        return restApiManager.get(payrollBaseUrl,payrollGetAllEndpoint,null
                 , PayrollAllEmployeeResponse.class).getPayrollEmployeeDetailsList();
     }
 
     public PayrollEmployeeDetails getEmployeeById(int id){
-        return apiManager.get(payrollBaseUrl,"/api/v1/employee/"+id,null
+        return restApiManager.get(payrollBaseUrl,"/api/v1/employee/"+id,null
                 , PayrollEmployeeResponse.class).getPayrollEmployeeDetails();
     }
 
     public PayrollEmployee createEmployee(EmployeeRequest employeeRequest){
-           return apiManager.post(payrollBaseUrl, payrollCreateEndpoint, employeeRequest
+           return restApiManager.post(payrollBaseUrl, payrollCreateEndpoint, employeeRequest
                    , null, PayrollCreateResponse.class).getPayrollEmployee();
     }
 }

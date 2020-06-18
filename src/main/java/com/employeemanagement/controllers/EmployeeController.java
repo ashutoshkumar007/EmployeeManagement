@@ -50,4 +50,8 @@ public class EmployeeController {
     public PayrollEmployeeDetails getEmployeesById(@PathVariable int id){
         return employeeService.getEmployeesById(id);
     }
+    @GetMapping("/all")
+    public List<Employee> getAllEmployees(){
+        return employeeService.getAllEmployees();
+    }
 }

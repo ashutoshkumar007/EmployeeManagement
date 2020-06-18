@@ -6,7 +6,7 @@ import com.employeemanagement.modal.request.Employee;
 
 public class EmployeeDataProviderUtil {
     public static Employee getEmployee() {
-        return new Employee().setId(1).setAge(28).setName("Ashu").setPayrollId(14);
+        return new Employee().setId(1).setAge(28).setName("Ashu").setId(14);
     }
 
     public static EmployeeRequest getEmployeerequest() {

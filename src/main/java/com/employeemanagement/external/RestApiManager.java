@@ -2,6 +2,7 @@ package com.employeemanagement.external;
 
 import com.employeemanagement.exception.EmployeeNotFoundException;
 import com.employeemanagement.exception.PayrollServiceException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -11,10 +12,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
-public class ApiManager {
+public class RestApiManager {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     public <T> T get(String baseUrl,String endPoint, HttpHeaders requestHeaders, Class<T> responseClassType) {
         ResponseEntity<T> responseEntity = null;
@@ -33,7 +37,7 @@ public class ApiManager {
     public <T> T post(String baseUrl,String endPoint, Object body, HttpHeaders requestHeaders, Class<T> responseClassType) {
         ResponseEntity<T> responseEntity = null;
         try {
-            HttpEntity<Object> requestEntity = new HttpEntity<>(body,requestHeaders);
+            HttpEntity<Object> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(body),requestHeaders);
             responseEntity = restTemplate.exchange(buildUrl(baseUrl,endPoint), HttpMethod.POST, requestEntity, responseClassType);
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
                 return responseEntity.getBody();

@@ -1,10 +1,7 @@
 package com.employeemanagement.modal.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
-
 import javax.persistence.*;
 import java.time.Instant;
 
@@ -12,15 +9,11 @@ import java.time.Instant;
 @Data
 @Accessors(chain = true)
 public class Employee {
+
+    private int Id;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
-
-    @Column(name = "payroll_id")
-    private int payrollId;
-
-   // @Pattern(regexp = CREATE_NAME_REGEX)
-    @Column( length = 200,unique = true)
+    @Column(length = 200, unique = true)
     private String name;
 
     private int age;
