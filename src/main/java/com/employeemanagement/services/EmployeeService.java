@@ -37,7 +37,7 @@ public class EmployeeService {
 
     @MethodLog
     public List<Employee> getEmployeesByName(String name) {
-        List<Integer> payrollEmpIds = Optional.ofNullable(payrollService.getAllEmployees())
+        List<Integer> empIds = Optional.ofNullable(payrollService.getAllEmployees())
                 .filter(CollectionUtils::isNotEmpty)
                 .map(payrollIds -> payrollIds.stream()
                         .map(PayrollEmployeeDetails::getId).collect(Collectors.toList()))
@@ -46,7 +46,7 @@ public class EmployeeService {
         return Optional.ofNullable(employeeRepoService.fetchEmployeesByName(name))
                 .filter(CollectionUtils::isNotEmpty)
                 .map(employees -> employees.stream()
-                        .filter(employee -> payrollEmpIds.contains(employee.getId())).collect(Collectors.toList()))
+                        .filter(employee -> empIds.contains(employee.getId())).collect(Collectors.toList()))
                 .filter(CollectionUtils::isNotEmpty)
                 .orElseThrow(EmployeeNotFoundException::new);
 
@@ -54,7 +54,7 @@ public class EmployeeService {
 
     @MethodLog
     public List<Employee> getEmployeesByAge(Integer age) {
-        List<Integer> payrollEmpIds = Optional.ofNullable(payrollService.getAllEmployees())
+        List<Integer> empIds = Optional.ofNullable(payrollService.getAllEmployees())
                 .filter(CollectionUtils::isNotEmpty)
                 .map(payrollIds -> payrollIds.stream()
                         .map(PayrollEmployeeDetails::getId).collect(Collectors.toList()))
@@ -63,7 +63,7 @@ public class EmployeeService {
         return Optional.ofNullable(employeeRepoService.fetchEmployeesByAge(age))
                 .filter(CollectionUtils::isNotEmpty)
                 .map(employees -> employees.stream()
-                        .filter(employee -> payrollEmpIds.contains(employee.getId())).collect(Collectors.toList()))
+                        .filter(employee -> empIds.contains(employee.getId())).collect(Collectors.toList()))
                 .filter(CollectionUtils::isNotEmpty)
                 .orElseThrow(EmployeeNotFoundException::new);
 

@@ -2,6 +2,7 @@ package com.employeemanagement.utils;
 
 import com.employeemanagement.dto.request.EmployeeRequest;
 import com.employeemanagement.dto.response.PayrollEmployee;
+import com.employeemanagement.dto.response.PayrollEmployeeDetails;
 import com.employeemanagement.modal.request.Employee;
 
 public class EmployeeDataProviderUtil {
@@ -19,6 +20,11 @@ public class EmployeeDataProviderUtil {
 
     public static EmployeeRequest getInvalidEmployeerequest() {
         return new EmployeeRequest().setAge(-28).setName("Ashu").setSalary(5000);
+    }
+
+    public static PayrollEmployeeDetails getPayrollEmployeeDetails() {
+        return new PayrollEmployeeDetails().setEmployee_age(28).setEmployee_name("Ashu")
+                .setEmployee_salary(5000).setId(14);
     }
 
 
