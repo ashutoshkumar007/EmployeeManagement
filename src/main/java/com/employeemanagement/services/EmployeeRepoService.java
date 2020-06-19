@@ -43,6 +43,10 @@ public class EmployeeRepoService {
         return employeeRepository.findAllByNameContains(name);
     }
 
+    public List<Employee> fetchEmployeesByStartName(String name) {
+        return employeeRepository.findAllByNameStartsWith(name);
+    }
+
     public List<Employee> fetchEmployeesByAge(int age) {
         return employeeRepository.findAllByAge(age);
     }

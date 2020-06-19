@@ -10,5 +10,6 @@ public interface EmployeeRepository extends JpaRepository<Employee,String> {
 
     List<Employee> findAllByNameContains(String name);
     List<Employee> findAllByAge(Integer age);
+    List<Employee> findAllByNameStartsWith(String name);
 
 }

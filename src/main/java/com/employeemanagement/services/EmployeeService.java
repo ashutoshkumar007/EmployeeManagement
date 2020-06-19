@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.employeemanagement.constant.StringConstant.NAME_REGEX;
+
 @Service
 public class EmployeeService {
 
@@ -69,14 +71,15 @@ public class EmployeeService {
 
     }
 
-    String getNewName(String name) {
-        int length = name.length();
-        List<Employee> employeeList = Optional.ofNullable(employeeRepoService.fetchEmployeesByName(name))
+     String getNewName(String name) {
+        String regex = "^"+name+NAME_REGEX;
+        List<Employee> employeeList =  Optional.ofNullable(employeeRepoService.fetchEmployeesByStartName(name))
+                .filter(CollectionUtils::isNotEmpty)
                 .map(employees -> employees.stream()
-                        .filter(employee -> employee.getName().length() >= length)
-                        .collect(Collectors.toList())).get();
+                        .filter(employee -> employee.getName().matches(regex)).collect(Collectors.toList())).get();
 
-        if (employeeList.size() > 0)
+
+        if (employeeList != null && employeeList.size() > 0)
             return name + employeeList.size();
         return name;
     }
