@@ -7,7 +7,7 @@ Employee management System is used by user to manage employee records of a co
 Pull the docker image using command
 
 ```bash
-docker pull amanjadon54/employee-application:elephanta
+docker pull dockerashu
 ```
 
 ## Functionality
