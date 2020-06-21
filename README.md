@@ -38,3 +38,5 @@ docker pull dockerashu
 4. After that it will add all employee using create method(the method used for adding single employee) one by one. If the employee is added successfully , then it will be added to success list otherwise it will be added to failed list in the same document.
 5. Once all employee of a document is processed ,then the job status will be marked as completed.
 6. User can get job status and failed employee list using the job id.
+
+![alt text](https://github.com/ashutoshkumar007/EmployeeManagement/blob/master/BulkCreateDesign.png)
