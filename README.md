@@ -19,13 +19,17 @@ docker pull dockerashu
 2. Search employee based on name or age: Search function makes sure employee is present in both systems before returning, else return error.
 
 ### Additional feature
-1. Performance metrics
-    System metrics related to JVM, thread and http can be viewed using endpoint
-    localhost:8036/actuator/prometheus
+1. #### Performance metrics
+System metrics related to JVM, thread and http can be viewed using endpoint
+```bash
+localhost:8036/actuator/prometheus
+```
 
-2. System health check
-   System health check enpoint which ensures db connection also
-   localhost:8035/health
+2. #### System health check
+System health check enpoint which ensures db connection also
+```bash
+localhost:8035/health
+```
 
 ## Design
 #### Add an employee
