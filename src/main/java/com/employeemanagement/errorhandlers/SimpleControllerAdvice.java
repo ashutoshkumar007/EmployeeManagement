@@ -17,10 +17,11 @@ import javax.validation.ConstraintViolationException;
 @Slf4j
 @RestControllerAdvice
 public class SimpleControllerAdvice {
-     public static String EMPLOYEE_NOT_FOUND_MESSAGE = "No employee found for this request";
-     public static String PAYROLL_EXCEPTION_MESSAGE = "Error in payroll service";
-     public static String INVALID_ARGUMENT_MESSAGE ="Invalid argument";
-     public static String NUMBER_FORMAT_MESSAGE = "Expecting number in place of string";
+     public static String EMPLOYEE_NOT_FOUND_MESSAGE = "No Response found for this request";
+     public static String PAYROLL_EXCEPTION_MESSAGE = "Unable to connect to payroll service";
+     public static String INVALID_ARGUMENT_MESSAGE ="Invalid arguments";
+     public static String NUMBER_FORMAT_MESSAGE = "Type mismatch for request params";
+     public static  String CONSTRAINT_VIOLATION_MESSAGE ="Invalid input: Name must be in alphabet, age must be greater than 14 and salary must be positive";
 
     @ExceptionHandler(EmployeeNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -40,7 +41,7 @@ public class SimpleControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request){
         log.warn("Invalid argument passed for request {} ",request.getRequestURI(),exception);
-        return StringConstant.CONSTRAINT_VIOLATION_MESSAGE;
+        return CONSTRAINT_VIOLATION_MESSAGE;
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -54,7 +55,7 @@ public class SimpleControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleConstraintViolationException(ConstraintViolationException exception, HttpServletRequest request){
         log.error("Constraint violated for request {} ",request.getRequestURI(),exception);
-        return StringConstant.CONSTRAINT_VIOLATION_MESSAGE;
+        return CONSTRAINT_VIOLATION_MESSAGE;
     }
 
     @ExceptionHandler(PayrollServiceException.class)
