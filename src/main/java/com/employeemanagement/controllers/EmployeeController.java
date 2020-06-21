@@ -1,8 +1,6 @@
 package com.employeemanagement.controllers;
 
-import com.employeemanagement.annotation.MethodLog;
 import com.employeemanagement.dto.response.PayrollEmployeeDetails;
-import com.employeemanagement.exception.EmployeeNotFoundException;
 import com.employeemanagement.dto.request.EmployeeRequest;
 import com.employeemanagement.modal.request.Employee;
 import com.employeemanagement.services.EmployeeService;
@@ -14,11 +12,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.util.List;
-import java.util.Optional;
 
 import static com.employeemanagement.constant.StringConstant.SEARCH_NAME_REGEX;
 
