@@ -43,10 +43,11 @@ public class RestApiManager {
         ResponseEntity<T> responseEntity = null;
         try {
             HttpEntity<Object> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(body),requestHeaders);
-            responseEntity = restTemplate.exchange(buildUrl(baseUrl,endPoint), HttpMethod.POST, requestEntity, responseClassType);
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                return responseEntity.getBody();
-            }
+//            responseEntity = restTemplate.exchange(buildUrl(baseUrl,endPoint), HttpMethod.POST, requestEntity, responseClassType);
+            return getResponse(buildUrl(baseUrl,endPoint), HttpMethod.POST, requestEntity, responseClassType);
+//            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+//                return responseEntity.getBody();
+//            }
         } catch (Exception e) {
             handleException(responseEntity, e);
         }
@@ -69,9 +70,11 @@ public class RestApiManager {
 
     private <T> T getResponse(String url, HttpMethod httpMethod ,HttpEntity<Object> requestEntity, Class<T> responseClassType ){
         return Failsafe.with(retryPolicy)
-                .onFailedAttempt((r,ex,ctx) -> log.warn("Error on attempt"))
-                .onFailure((r,ex,ctx) -> log.error("Error"))
-                .onSuccess((r, ctx) -> log.debug("complete successfully"))
+                .onFailedAttempt((r,ex,ctx) -> log.warn("failed attempt to connect to payroll service, attempt: {}, duration {}"
+                        ,ctx.getExecutions(),ctx.getElapsedTime().toMillis(),ex))
+                .onFailure((r,ex,ctx) -> log.error("failed  to connect to payroll service, attempt: {}, duration {}"
+                        ,ctx.getExecutions(),ctx.getElapsedTime().toMillis(),ex))
+                .onSuccess((r, ctx) -> log.debug("successfully connected to payroll service , duration: {}",ctx.getElapsedTime().toMillis()))
                 .get(() -> restTemplate.exchange(url, httpMethod, requestEntity, responseClassType).getBody());
     }
 }
