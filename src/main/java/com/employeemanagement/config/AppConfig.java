@@ -9,6 +9,7 @@ import net.jodah.failsafe.RetryPolicy;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
@@ -30,8 +31,10 @@ public class AppConfig {
     @Bean
     RetryPolicy retryPolicy(){
         return new RetryPolicy()
-                .withMaxRetries(3)
-                .withDelay(1, TimeUnit.SECONDS);
+                .withMaxRetries(2)
+                .withDelay(1, TimeUnit.SECONDS)
+               .retryIf((o,throwable) -> throwable instanceof HttpStatusCodeException
+                       && ((HttpStatusCodeException) throwable).getStatusCode().is5xxServerError());
 
     }
 
