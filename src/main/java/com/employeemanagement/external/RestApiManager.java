@@ -4,6 +4,8 @@ import com.employeemanagement.exception.EmployeeNotFoundException;
 import com.employeemanagement.exception.PayrollServiceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import net.jodah.failsafe.Failsafe;
+import net.jodah.failsafe.RetryPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -20,19 +22,22 @@ public class RestApiManager {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    RetryPolicy retryPolicy;
+
     public <T> T get(String baseUrl,String endPoint, HttpHeaders requestHeaders, Class<T> responseClassType) {
         ResponseEntity<T> responseEntity = null;
         try {
             HttpEntity<Object> requestEntity = new HttpEntity<>(requestHeaders);
-            responseEntity = restTemplate.exchange(buildUrl(baseUrl,endPoint), HttpMethod.GET, requestEntity, responseClassType);
-            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                return responseEntity.getBody();
-            }
+//            responseEntity = restTemplate.exchange(buildUrl(baseUrl,endPoint), HttpMethod.GET, requestEntity, responseClassType);
+            return getResponse(buildUrl(baseUrl,endPoint), HttpMethod.GET, requestEntity, responseClassType);
+
         } catch (Exception e) {
             handleException(responseEntity, e);
         }
         return null;
     }
+
 
     public <T> T post(String baseUrl,String endPoint, Object body, HttpHeaders requestHeaders, Class<T> responseClassType) {
         ResponseEntity<T> responseEntity = null;
@@ -60,5 +65,13 @@ public class RestApiManager {
             throw new EmployeeNotFoundException();
         }else
             throw new PayrollServiceException();
+    }
+
+    private <T> T getResponse(String url, HttpMethod httpMethod ,HttpEntity<Object> requestEntity, Class<T> responseClassType ){
+        return Failsafe.with(retryPolicy)
+                .onFailedAttempt((r,ex,ctx) -> log.warn("Error on attempt"))
+                .onFailure((r,ex,ctx) -> log.error("Error"))
+                .onSuccess((r, ctx) -> log.debug("complete successfully"))
+                .get(() -> restTemplate.exchange(url, httpMethod, requestEntity, responseClassType).getBody());
     }
 }

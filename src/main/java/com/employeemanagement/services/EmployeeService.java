@@ -73,15 +73,13 @@ public class EmployeeService {
 
      String getNewName(String name) {
         String regex = "^"+name+NAME_REGEX;
-        List<Employee> employeeList =  Optional.ofNullable(employeeRepoService.fetchEmployeesByStartName(name))
+        return  Optional.ofNullable(employeeRepoService.fetchEmployeesByStartName(name))
                 .filter(CollectionUtils::isNotEmpty)
                 .map(employees -> employees.stream()
-                        .filter(employee -> employee.getName().matches(regex)).collect(Collectors.toList())).get();
-
-
-        if (employeeList != null && employeeList.size() > 0)
-            return name + employeeList.size();
-        return name;
+                        .filter(employee -> employee.getName().matches(regex)).collect(Collectors.toList()))
+                .filter(CollectionUtils::isNotEmpty)
+                .map(List::size)
+                .flatMap(size->Optional.of(name).map(newName -> name+size)).orElse(name);
     }
 
    // Utility Methods

@@ -111,7 +111,16 @@ public class EmployeeControllerTest {
     @Test
     public void getEmployeesByInvalidAge() throws Exception {
 
-        mockMvc.perform((get(BASE_URL+"/age"+"/{age}",-4)
+        mockMvc.perform((get(BASE_URL+"/age"+"/{age}",-19)
+                .contentType(MediaType.APPLICATION_JSON)))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void getEmployeesByInvalidAgeType() throws Exception {
+
+        mockMvc.perform((get(BASE_URL+"/age"+"/{age}","xyz")
                 .contentType(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isBadRequest());
 
@@ -125,6 +134,7 @@ public class EmployeeControllerTest {
                 .andExpect(status().isBadRequest());
 
     }
+
 
     private String createJson(EmployeeRequest employeeRequest) throws JsonProcessingException {
         return objectMapper.writeValueAsString(employeeRequest);
