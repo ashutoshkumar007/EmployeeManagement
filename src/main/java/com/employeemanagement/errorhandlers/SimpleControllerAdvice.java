@@ -1,6 +1,5 @@
 package com.employeemanagement.errorhandlers;
 
-import com.employeemanagement.constant.StringConstant;
 import com.employeemanagement.exception.EmployeeNotFoundException;
 import com.employeemanagement.exception.PayrollServiceException;
 import lombok.extern.slf4j.Slf4j;
