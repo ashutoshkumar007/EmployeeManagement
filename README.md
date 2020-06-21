@@ -39,4 +39,4 @@ docker pull dockerashu
 5. Once all employee of a document is processed ,then the job status will be marked as completed.
 6. User can get job status and failed employee list using the job id.
 
-![alt text](https://github.com/ashutoshkumar007/EmployeeManagement/blob/master/BulkCreateDesign.png)
+![alt text](https://github.com/ashutoshkumar007/EmployeeManagement/blob/master/AddBulkDesign.png)
