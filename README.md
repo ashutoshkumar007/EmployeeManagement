@@ -20,8 +20,12 @@ docker pull dockerashu
 
 ### Additional feature
 1. Performance metrics
+    System metrics related to JVM, thread and http can be viewed using endpoint
+    localhost:8036/actuator/prometheus
 
 2. System health check
+   System health check enpoint which ensures db connection also
+   localhost:8035/health
 
 ## Design
 #### Add an employee
