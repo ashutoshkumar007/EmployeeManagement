@@ -26,30 +26,22 @@ public class RestApiManager {
     RetryPolicy retryPolicy;
 
     public <T> T get(String baseUrl,String endPoint, HttpHeaders requestHeaders, Class<T> responseClassType) {
-        ResponseEntity<T> responseEntity = null;
         try {
             HttpEntity<Object> requestEntity = new HttpEntity<>(requestHeaders);
-//            responseEntity = restTemplate.exchange(buildUrl(baseUrl,endPoint), HttpMethod.GET, requestEntity, responseClassType);
             return getResponse(buildUrl(baseUrl,endPoint), HttpMethod.GET, requestEntity, responseClassType);
 
         } catch (Exception e) {
-            handleException(responseEntity, e);
+            handleException( e);
         }
         return null;
     }
 
-
     public <T> T post(String baseUrl,String endPoint, Object body, HttpHeaders requestHeaders, Class<T> responseClassType) {
-        ResponseEntity<T> responseEntity = null;
         try {
             HttpEntity<Object> requestEntity = new HttpEntity<>(objectMapper.writeValueAsString(body),requestHeaders);
-//            responseEntity = restTemplate.exchange(buildUrl(baseUrl,endPoint), HttpMethod.POST, requestEntity, responseClassType);
             return getResponse(buildUrl(baseUrl,endPoint), HttpMethod.POST, requestEntity, responseClassType);
-//            if (responseEntity.getStatusCode() == HttpStatus.OK) {
-//                return responseEntity.getBody();
-//            }
         } catch (Exception e) {
-            handleException(responseEntity, e);
+            handleException(e);
         }
         return null;
     }
@@ -60,7 +52,7 @@ public class RestApiManager {
         return builder.toString();
     }
 
-    private void handleException(ResponseEntity responseEntity, Exception e) {
+    private void handleException( Exception e) {
         log.error("failed to access payroll service  message {}" ,e.getMessage());
         if (e instanceof HttpClientErrorException) {
             throw new EmployeeNotFoundException();
