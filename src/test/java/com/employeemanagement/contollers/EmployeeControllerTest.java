@@ -19,6 +19,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +40,8 @@ public class EmployeeControllerTest {
 
     private ObjectMapper objectMapper;
 
+    private Validator validator;
+
     @Mock
     private EmployeeService employeeService;
 
@@ -51,6 +56,9 @@ public class EmployeeControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
                 .setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper))
                 .build();
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @Test
@@ -110,8 +118,8 @@ public class EmployeeControllerTest {
 
     @Test
     public void getEmployeesByInvalidAge() throws Exception {
-
-        mockMvc.perform((get(BASE_URL+"/age"+"/{age}",-19)
+        int age =-19;
+        mockMvc.perform((get(BASE_URL+"/age"+"/{age}",age)
                 .contentType(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isBadRequest());
 
