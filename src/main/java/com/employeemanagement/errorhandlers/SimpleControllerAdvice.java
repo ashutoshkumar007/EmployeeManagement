@@ -3,7 +3,6 @@ package com.employeemanagement.errorhandlers;
 import com.employeemanagement.exception.EmployeeNotFoundException;
 import com.employeemanagement.exception.PayrollServiceException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import io.swagger.annotations.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -22,7 +21,7 @@ public class SimpleControllerAdvice {
      public static String EMPLOYEE_NOT_FOUND_MESSAGE = "No Response found for this request";
      public static String PAYROLL_EXCEPTION_MESSAGE = "Unable to connect to payroll service";
      public static String INVALID_FORMAT_MESSAGE = "Type mismatch for request params";
-     public static  String CONSTRAINT_VIOLATION_MESSAGE ="Invalid input: Name must be in alphabet, age must be greater than 14 and salary must be positive";
+     public static String CONSTRAINT_VIOLATION_MESSAGE ="Invalid input: Name must be in alphabet, age must be greater than 14 and salary must be positive";
 
     @ExceptionHandler(EmployeeNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
