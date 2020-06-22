@@ -18,11 +18,13 @@ docker run -p 8035:8035 dockerashu007/employee:1.0
 
 ## Functionality
 
-1. Add an employee. Add an employee locally and to the remote payroll system. If an employee with same name exists, add a number to the name.
+1. ##### Add an employee:
+   Add an employee locally and to the remote payroll system. If an employee with same name exists, add a number to the name.
    
- ##### Constraints: Employee name should be alphabetic, age should be more than 14 and salary should be positive
+   ##### Constraints: Employee name should be alphabetic, age should be more than 14 and salary should be positive
 
-2. Search employee based on name or age: Search function makes sure employee is present in both systems before returning, else return error.
+2. ##### Search employee based on name or age:
+   Search function makes sure employee is present in both systems before returning, else return error.
 
 ### Additional feature
 1. #### Performance metrics
