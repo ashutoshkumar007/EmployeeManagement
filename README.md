@@ -28,13 +28,13 @@ docker run -p 8035:8035 dockerashu007/employee:1.0
 
 ### Additional feature
 1. #### Performance metrics
-System metrics related to JVM, thread and http can be viewed using endpoint
+   System metrics related to JVM, thread and http can be viewed using endpoint
 ```bash
 localhost:8036/actuator/prometheus
 ```
 
 2. #### System health check
-System health check enpoint which ensures db connection also
+   System health check enpoint which ensures db connection also
 ```bash
 localhost:8035/health
 ```
@@ -54,5 +54,7 @@ localhost:8035/health
 4. After that it will add all employee using create method(the method used for adding single employee) one by one. If the employee is added successfully , then it will be added to success list otherwise it will be added to failed list in the same document.
 5. Once all employee of a document is processed ,then the job status will be marked as completed.
 6. User can get job status and failed employee list using the job id.
+
+### Bulk Add Design
 
 ![alt text](https://github.com/ashutoshkumar007/EmployeeManagement/blob/master/AddBulkDesign.png)
