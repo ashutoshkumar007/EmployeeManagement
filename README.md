@@ -7,7 +7,13 @@ Employee management System is used by user to manage employee records of a co
 Pull the docker image using command
 
 ```bash
-docker pull dockerashu
+docker pull dockerashu007/employee:1.0
+```
+
+Run docker image using command
+
+```bash
+docker run -p 8035:8035 dockerashu007/employee:1.0
 ```
 
 ## Functionality
